@@ -33,6 +33,10 @@ class Chives(object):
             self.leverage += n
             self.profit += self.get_float_profit(price)
 
+def strategy():
+    pass
+
+
 if __name__ == '__main__':
     # pro = ts.pro_api()
     # north_money_raw = pro.moneyflow_hsgt(start_date='20180101', end_date='20181231')
@@ -42,7 +46,7 @@ if __name__ == '__main__':
     print("testing ... ")
     chive = Chives()
     chive.buy(2, 1)
-    chive.buy(3, 1.2)
+    chive.buy(3, 1.5)
     print(chive.get_float_profit(2.8))
     chive.sell(2, 1.2)
     print(chive.get_real_profit())
