@@ -1,11 +1,14 @@
 import tushare as ts
+from pyhocon import ConfigFactory
+
+conf = ConfigFactory.parse_file('configs/basic.conf')
 
 class Chives(object):
     """docstring for Chives"""
     def __init__(self, leverage=100, total_money=10000):
         super(Chives, self).__init__()
-        self.init_leverage = leverage
-        self.total_money = total_money
+        self.init_leverage = conf.get_int("trade.leverage")
+        self.total_money = conf.get_int("trade.total_money")
 
         self.leverage = self.init_leverage
         self.available_money = total_money
@@ -33,16 +36,32 @@ class Chives(object):
             self.leverage += n
             self.profit += self.get_float_profit(price)
 
-def strategy():
-    pass
+class Evaluator(object):
+    """docstring for Evaluator"""
+    def __init__(self, strategy):
+        super(Evaluator, self).__init__()
+        self.chive = Chives()
+        self.strategy = strategy
+
+        # pro = ts.pro_api()
+        # north_money_raw = pro.moneyflow_hsgt(start_date='20180101', end_date='20181231')
+        # days, _ = north_money_raw.shape
+
+
+    def eval(self):
+        pass
+
+
+
+    def hangqing(self, ):
+        pro = ts.pro_api()
+        df = pro.daily(ts_code='000001.SZ', start_date='20180701', end_date='20180718')
+
+
+
 
 
 if __name__ == '__main__':
-    # pro = ts.pro_api()
-    # north_money_raw = pro.moneyflow_hsgt(start_date='20180101', end_date='20181231')
-    # days, _ = north_money_raw.shape
-
-
     print("testing ... ")
     chive = Chives()
     chive.buy(2, 1)
