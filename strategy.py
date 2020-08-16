@@ -5,6 +5,16 @@ from pyhocon import ConfigFactory
 
 conf = ConfigFactory.parse_file('configs/basic.conf')
 
+class Operation(object):
+    """数据结构，买入或者卖出"""
+    def __init__(self, arg):
+        super(Operation, self).__init__()
+        self.arg = arg
+
+    # 或许可以直接用更简单的东西代替
+
+
+
 class NorthMoneyStrategy(object):
     """北向资金策略：通过复制北向资金的持仓来控制仓位"""
     def __init__(self, arg):
@@ -21,10 +31,6 @@ class NorthMoneyStrategy(object):
 
     #  根据历史数据计算北向资金增长因子
     def get_increate_factor(self):
-        pass
-
-    # 计算北向资金的持仓
-    def get_north_money_position(self):
         pass
 
     def __get_hsgt(self, date1, date2):
@@ -60,8 +66,12 @@ class NorthMoneyStrategy(object):
         df.to_csv(self.data_path)
         return df
 
-    # 根据北向资金当天的流入流出，计算出持仓策略
-    def opertation(self, money_flow):if __name__ == '__main__':
+    # 估算北向资金的持仓，核心功能。输出北向资金的持仓情况
+    def get_north_money_position(self):
+        pass
+
+    # 根据北向资金的持仓，计算出操作策略：返回一个Operation
+    def opertation(self, money_flow):
         pass
 
 

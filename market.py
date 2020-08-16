@@ -4,7 +4,7 @@ from pyhocon import ConfigFactory
 conf = ConfigFactory.parse_file('configs/basic.conf')
 
 class Chives(object):
-    """docstring for Chives"""
+    """韭菜"""
     def __init__(self, leverage=100, total_money=10000):
         super(Chives, self).__init__()
         self.init_leverage = conf.get_int("trade.leverage")
@@ -37,7 +37,7 @@ class Chives(object):
             self.profit += self.get_float_profit(price)
 
 class Evaluator(object):
-    """docstring for Evaluator"""
+    """评估函数，根据操作返回收益？？"""
     def __init__(self, strategy):
         super(Evaluator, self).__init__()
         self.chive = Chives()
