@@ -9,6 +9,7 @@ class Chives(object):
         super(Chives, self).__init__()
         self.init_leverage = conf.get_int("trade.leverage")
         self.total_money = conf.get_int("trade.total_money")
+        self.freeze_time = conf.get_int("rules.freeze_time")
 
         self.leverage = self.init_leverage
         self.available_money = total_money
@@ -16,30 +17,43 @@ class Chives(object):
         self.profit = 0
         self.one_hand = (1 / leverage) * self.available_money
 
+        self.position = [] # a list like [(trade_date, share), ... ]
+        self.total_share = 0
+        self.free_share = 0
+
     def get_float_profit(self, price):
         return (self.available_money + self.share * price) - self.total_money
 
     def get_real_profit(self):
         return self.profit
 
-    def buy(self, n, price):
-        if n <= self.leverage: 
-            self.leverage -= n
-            self.share += (n * self.one_hand) / price
-            self.available_money -= n * self.one_hand
+    def __update_free_share(self, time):
+        while (self.position and self.__is_frozen(self.position[-1], time)):
+            time, share = self.position.pop(-1)
+            self.free_share += share
+            self.total_share -= share
+        return
 
-    def sell(self, n, price):
-        if (n + self.leverage <= self.init_leverage):
-            sell_share = n / ( self.init_leverage - self.leverage) * self.share
-            self.share -= sell_share
-            self.available_money += sell_share * price
-            self.leverage += n
-            self.profit += self.get_float_profit(price)
+    def __is_frozen(self, position_item, time):
+        trade_date, share = position_item
+        return (time - self.freeze_time) > trade_date
 
-class Evaluator(object):
-    """评估函数，根据操作返回收益？？"""
+    def __buy(self, money, price, time):
+        share = money / price
+        return (share, time)
+
+    def __sell(self, money, price):
+        return share * price
+
+    # core function, opration is a data structure
+    def operate(self, opration):
+        pass
+
+
+class Market(object):
+    """市场"""
     def __init__(self, strategy):
-        super(Evaluator, self).__init__()
+        super(Market, self).__init__()
         self.chive = Chives()
         self.strategy = strategy
 
@@ -47,11 +61,8 @@ class Evaluator(object):
         # north_money_raw = pro.moneyflow_hsgt(start_date='20180101', end_date='20181231')
         # days, _ = north_money_raw.shape
 
-
-    def eval(self):
+    def eval(self, strategy, start_date, end_date):
         pass
-
-
 
     def hangqing(self, ):
         pro = ts.pro_api()
