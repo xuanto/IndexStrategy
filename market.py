@@ -67,13 +67,6 @@ class Market(object):
         # north_money_raw = pro.moneyflow_hsgt(start_date='20180101', end_date='20181231')
         # days, _ = north_money_raw.shape
 
-    def eval(self, strategy, start_date, end_date):
-        pass
-
-    def hangqing(self, ):
-        pro = ts.pro_api()
-        df = pro.daily(ts_code='000001.SZ', start_date='20180701', end_date='20180718')        
-
     #  根据历史数据计算北向资金增长因子
     def get_increate_factor(self):
         pass
@@ -111,12 +104,23 @@ class Market(object):
         df.to_csv(self.data_path)
         return df
 
-    # 估算北向资金的持仓，核心功能。输出北向资金的持仓情况
+    # [core function] 估算北向资金的持仓，输出北向资金的持仓情况
     def get_north_money_position(self):
         pass
 
+    # [core function] 返回行情信息:market_information
+    def get_market_information(self):
+        pro = ts.pro_api()
+        df = pro.daily(ts_code='000001.SZ', start_date='20180701', end_date='20180718')
 
 
+        north_money_position = self.get_north_money_position()     
+
+
+
+# evaluation
+def eval(self, strategy, start_date, end_date):
+    pass
 
 
 
