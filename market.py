@@ -69,8 +69,9 @@ class Market(object):
         self.data_path = conf.get_string("data.north_money_hist_file")
         if os.file_exist(data_path)
             self.hist_data = pd.read_csv(self.data_path)
+            self.__update_hist_data()
         else:
-            self.hist_data = self.__update_hist_data()
+            self.hist_data = self.__generate_hist_data()
         # pro = ts.pro_api()
         # north_money_raw = pro.moneyflow_hsgt(start_date='20180101', end_date='20181231')
         # days, _ = north_money_raw.shape
