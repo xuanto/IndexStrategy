@@ -47,14 +47,22 @@ class Chives(object):
 
     # core function, opration is a data structure
     def operate(self, opration):
-        pass
+        operate_code, shares = opration
+        if operate_code == 0:
+            return
+        elif operate_code == 1:
+            pass
+        elif operate_code == -1:
+            pass
 
 
 class Market(object):
     """市场，提供行情信息"""
-    def __init__(self, strategy):
+    def __init__(self):
         super(Market, self).__init__()
         today = datetime.date.today()
+        # YYYYMMDD
+        self.today = datetime.date.today().strftime("%Y%m%d")
         self.yesterday = today - datetime.timedelta(days=1)
         self.pro = ts.pro_api()
 
@@ -69,13 +77,11 @@ class Market(object):
 
     #  根据历史数据计算北向资金增长因子
     def get_increate_factor(self):
+        m_inf_north_money_position = self.north_money_hist_data.north_money.sum()
         pass
 
     def __get_hsgt(self, date1, date2):
-        return  self.pro.moneyflow_hsgt(
-                    start_date=date1.strftime("%Y%m%d"),
-                    end_date=date2.strftime("%Y%m%d")
-                )
+        return  self.pro.moneyflow_hsgt(start_date=date1, end_date=date2)
 
     # 生成北向数据
     def __generate_hist_data(self):
@@ -93,6 +99,10 @@ class Market(object):
 
     # 更新北向数据
     def __update_hist_data(self):
+        x = self.north_money_hist_data.tail(1).trade_date.item()
+        x = [int(x[:4]), int(x[4:6]), int(x[6:8])]
+        YYYYMMDD = datetime.datetime(*x)
+        
         date1 = self.yesterday - datetime.timedelta(days=300)
         date2 = self.yesterday
         df = self.__get_hsgt(date1, date2)
@@ -127,11 +137,7 @@ def eval(self, strategy, start_date, end_date):
 if __name__ == '__main__':
     print("testing ... ")
     chive = Chives()
-    chive.buy(2, 1)
-    chive.buy(3, 1.5)
-    print(chive.get_float_profit(2.8))
-    chive.sell(2, 1.2)
-    print(chive.get_real_profit())
-    chive.sell(3, 0.1)
-    print(chive.get_real_profit())
+    market = Market()
+
+    
 
